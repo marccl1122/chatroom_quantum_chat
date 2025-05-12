@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
-    "build": "tsc --outDir ./dist --module commonjs --target es2017 --lib es2017,esnext.asynciterable --esModuleInterop true --strict true",
+    "build": "tsc --outDir ./dist --module commonjs --target es2017 --lib es2017,esnext.asynciterable --esModuleInterop true --strict true --allowJs true --checkJs true",
     "start": "node dist/index.js",
     "postinstall": "npm run build"
   },
