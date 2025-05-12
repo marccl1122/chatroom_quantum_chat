@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat - Quantum Chat</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdn.clerk.dev/v1/clerk.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'quantum-purple': '#6B46C1',
+            'quantum-dark': '#1A1A2E',
+            'quantum-light': '#E9D8FD'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-quantum-dark min-h-screen">
+  <div class="container mx-auto p-4">
+    <div class="bg-white rounded-lg shadow-md p-4">
+      <div class="flex justify-between items-center mb-4">
+        <h1 class="text-2xl font-bold text-quantum-dark">Quantum Chat</h1>
+        <button onclick="signOut()" class="text-quantum-purple hover:text-opacity-80">
+          Sign Out
+        </button>
+      </div>
+
+      <div id="messages" class="h-[500px] overflow-y-auto mb-4 space-y-4">
+        <% messages.forEach(function(message) { %>
+          <div class="bg-quantum-light p-3 rounded-lg">
+            <div class="font-bold text-quantum-dark"><%= message.username %></div>
+            <div class="text-quantum-dark"><%= message.content %></div>
+            <div class="text-xs text-gray-500">
+              <%= new Date(message.timestamp).toLocaleString() %>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+
+      <form id="messageForm" class="flex gap-2">
+        <input type="text" id="message" placeholder="Type a message..." required
+          class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-quantum-purple focus:ring-quantum-purple">
+        <button type="submit"
+          class="bg-quantum-purple text-white py-2 px-4 rounded-md hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-quantum-purple focus:ring-offset-2">
+          Send
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const socket = io();
+    const messagesDiv = document.getElementById('messages');
+    const messageForm = document.getElementById('messageForm');
+    const messageInput = document.getElementById('message');
+    let currentUser = null;
+
+    const clerk = window.Clerk.init({
+      publishableKey: process.env.CLERK_PUBLISHABLE_KEY
+    });
+
+    clerk.load().then(() => {
+      currentUser = clerk.user;
+    });
+
+    async function signOut() {
+      await clerk.signOut();
+      window.location.href = '/';
+    }
+
+    messageForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const message = messageInput.value;
+      
+      if (message && currentUser) {
+        socket.emit('sendMessage', { 
+          message, 
+          username: currentUser.username || currentUser.emailAddresses[0].emailAddress 
+        });
+        messageInput.value = '';
+      }
+    });
+
+    socket.on('newMessage', (message) => {
+      const messageElement = document.createElement('div');
+      messageElement.className = 'bg-quantum-light p-3 rounded-lg';
+      messageElement.innerHTML = `
+        <div class="font-bold text-quantum-dark">${message.username}</div>
+        <div class="text-quantum-dark">${message.content}</div>
+        <div class="text-xs text-gray-500">
+          ${new Date(message.timestamp).toLocaleString()}
+        </div>
+      `;
+      messagesDiv.appendChild(messageElement);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+  </script>
+</body>
+</html> 

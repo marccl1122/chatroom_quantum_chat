@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login - Quantum Chat</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.clerk.dev/v1/clerk.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'quantum-purple': '#6B46C1',
+            'quantum-dark': '#1A1A2E',
+            'quantum-light': '#E9D8FD'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-quantum-dark min-h-screen flex items-center justify-center">
+  <div class="bg-white p-8 rounded-lg shadow-md w-96">
+    <h1 class="text-2xl font-bold mb-6 text-center text-quantum-dark">Welcome Back</h1>
+    
+    <div id="clerk-sign-in"></div>
+
+    <div class="mt-4 text-center">
+      <p class="text-sm text-gray-600">
+        Don't have an account? 
+        <a href="/register" class="text-quantum-purple hover:text-opacity-80">Register</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const clerk = window.Clerk.init({
+      publishableKey: process.env.CLERK_PUBLISHABLE_KEY
+    });
+
+    clerk.mountSignIn({
+      elementId: 'clerk-sign-in',
+      afterSignInUrl: '/chat',
+      signUpUrl: '/register'
+    });
+  </script>
+</body>
+</html> 
