@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2017",
+    "target": "es2020",
     "module": "commonjs",
     "outDir": "./dist",
     "rootDir": "./src",
@@ -8,9 +8,17 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "lib": ["es2017", "esnext.asynciterable"],
-    "moduleResolution": "node"
+    "lib": [
+      "es2020",
+      "esnext.asynciterable",
+      "dom"
+    ],
+    "moduleResolution": "node",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "sourceMap": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist"]
 } 
