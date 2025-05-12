@@ -1,0 +1,35 @@
+{
+  "name": "quantum-chat",
+  "version": "1.0.0",
+  "description": "Real-time chat application with TypeScript and Socket.io",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "nodemon src/index.ts",
+    "build": "tsc",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@clerk/clerk-sdk-node": "^4.13.23",
+    "@prisma/client": "^5.10.0",
+    "bcrypt": "^5.1.1",
+    "cookie-session": "^2.0.0",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-validator": "^7.0.1",
+    "socket.io": "^4.7.4",
+    "socket.io-client": "^4.7.4"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cookie-session": "^2.0.45",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.20",
+    "@types/socket.io": "^3.0.2",
+    "nodemon": "^3.0.3",
+    "prisma": "^5.10.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
